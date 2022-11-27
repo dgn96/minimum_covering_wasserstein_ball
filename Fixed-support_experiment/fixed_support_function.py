@@ -1,15 +1,20 @@
 import numpy as np
 import cvxpy as cp
 
-def fixed_support_min_wasserstein_ball(xi, p_k,):
+def fixed_support_min_wasserstein_ball(p_k, c):
+	"
+	To say something here
+	
+	"
+
 	# Define number of distributions
-	K = xi.shape[0]
+	K = len(p_k)
 
 	# Define number of atoms per sample
-	N = xi.shape[1]
+	N = len(p_k[0])
 
 	# Dec Var
-	T = cp.Variable((N, N))
+	T = [cp.Variable((N, N)) for k in range(K)]
 	epsilon = cp.Variable((1, 1))
 	p = cp.Variable((N))
 
@@ -17,11 +22,15 @@ def fixed_support_min_wasserstein_ball(xi, p_k,):
 	obj = cp.Minimize(epsilon)
 
 	# Cons
-	cons = [T >= 0]
-	cons.append(cp.trace(T@c) <= epsilon)
-	cons.append(T@np.ones(N) == p)
-	cons.append(T.T@np.ones(N) == pi)
+	for k in range(K):
+    		cons = [T[k] >= 0]
+    		#cons.append(sum(sum(cp.multiply(T[k], c))) <= epsilon)
+    		cons.append(cp.trace(c.T@T[k]) <= epsilon)
+    		cons.append(T[k]@np.ones(N) == p)
+    		cons.append(T[k].T@np.ones(N) == p_k[k])
 
 	# Solve program
 	problem = cp.Problem(obj, cons)
 	problem.solve()
+
+	return p.value
