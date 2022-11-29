@@ -2,10 +2,10 @@ import numpy as np
 import cvxpy as cp
 
 def fixed_support_min_wasserstein_ball(p_k, c):
-	"
+	"""
 	To say something here
 	
-	"
+	"""
 
 	# Define number of distributions
 	K = len(p_k)
