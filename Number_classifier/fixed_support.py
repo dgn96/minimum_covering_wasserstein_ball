@@ -25,7 +25,7 @@ def fixed_support(c, p_k):
 
     # Solve program
     problem = cp.Problem(obj, cons)
-    problem.solve()
+    problem.solve(solver=cp.MOSEK)
     
     return (epsilon.value, p.value)
 
