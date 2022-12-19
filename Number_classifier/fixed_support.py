@@ -25,7 +25,7 @@ def fixed_support(c, p_k):
 
     # Solve program
     problem = cp.Problem(obj, cons)
-    problem.solve(solver=cp.ECOS)
+    problem.solve(solver = cp.SCIPY, scipy_options={"method": "highs"})
     
     return (epsilon.value, p.value)
 
@@ -45,6 +45,6 @@ def wasserstein_dist(c, p, p_k):
 
     # Solve program
     problem = cp.Problem(obj, cons)
-    problem.solve()
+    problem.solve(solver = cp.SCIPY, scipy_options={"method": "highs"})
 
     return obj.value
